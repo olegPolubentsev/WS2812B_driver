@@ -25,8 +25,9 @@
 #define log_0 17
 #define log_1 41
 uint32_t hz = 59; // 48000000/59=800kHz
-uint8_t value_pwm = 0;
-uint8_t mas[240];
+uint16_t value_pwm = 0;
+const int kol_led = 10;
+uint16_t mas[40+240] = {0};
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -88,7 +89,11 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  for (int i = 40; i<239+40; i+=2)
+  {
+	  mas[i] = log_0;
+	  mas[i+1] = log_1;
+  }
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -96,19 +101,78 @@ int main(void)
   MX_DMA_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
+  //HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&mas, kol_led*24+40);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&mas, kol_led*24+40);
     /* USER CODE END WHILE */
-  TIM3->CCR1=log_0;
+//TIM3->CCR1 =20;
     /* USER CODE BEGIN 3 */
-
-
+	//HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&mas, kol_led*24);
+/*
+ TIM3->CCR1 = 0;
+ HAL_Delay(1);
+ TIM3->CCR1 = log_0;
+ HAL_Delay(1);
+ TIM3->CCR1 = 0;
+  HAL_Delay(1);
+ TIM3->CCR1 = log_0;
+ delay_T();
+ TIM3->CCR1 = log_0;
+  delay_T();
+  TIM3->CCR1 = log_0;
+   delay_T();
+   TIM3->CCR1 = log_0;
+    delay_T();
+    TIM3->CCR1 = log_0;
+     delay_T();
+     TIM3->CCR1 = log_0;
+      delay_T();
+      TIM3->CCR1 = log_0;
+       delay_T();
+       TIM3->CCR1 = log_0;
+       //----------------------------
+        delay_T();
+        TIM3->CCR1 = log_1;
+         delay_T();
+         TIM3->CCR1 = log_1;
+          delay_T();
+          TIM3->CCR1 = log_1;
+           delay_T();
+           TIM3->CCR1 = log_1;
+            delay_T();
+            TIM3->CCR1 = log_1;
+             delay_T();
+             TIM3->CCR1 = log_1;
+              delay_T();
+              TIM3->CCR1 = log_1;
+               delay_T();
+               TIM3->CCR1 = log_1;
+                delay_T();
+                //----------------------------
+                        delay_T();
+                        TIM3->CCR1 = log_0;
+                         delay_T();
+                         TIM3->CCR1 = log_0;
+                          delay_T();
+                          TIM3->CCR1 = log_0;
+                           delay_T();
+                           TIM3->CCR1 = log_0;
+                            delay_T();
+                            TIM3->CCR1 = log_0;
+                             delay_T();
+                             TIM3->CCR1 = log_0;
+                              delay_T();
+                              TIM3->CCR1 = log_0;
+                               delay_T();
+                               TIM3->CCR1 = log_0;
+                                delay_T();
+                                */
   }
   /* USER CODE END 3 */
 }
@@ -171,7 +235,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = hz;
+  htim3.Init.Period = 59;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
@@ -193,6 +257,8 @@ static void MX_TIM3_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM3_Init 2 */
+  /* Peripheral DMA init*/
+
 
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
@@ -251,7 +317,54 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void set_led(uint16_t number, uint16_t R, uint16_t G, uint16_t B)
+{
+	if (number > kol_led-1) number = kol_led-1; else if (number<0) number = 0;
+	if (R>255) R=255;
+	else if (R<0) R=0;
+		else if (G>255) G=255;
+		else if (G<0) G=0;
+			else if (B>255) B=255;
+			else if (B<0) B=0;
 
+
+	mas[number*24]    = 0;
+    mas[number*24+1]  = 0;
+    mas[number*24+2]  = 0;
+    mas[number*24+3]  = 0;
+	mas[number*24+4]  = 0;
+	mas[number*24+5]  = 0;
+	mas[number*24+6]  = 0;
+	mas[number*24+7]  = 0;
+
+	mas[number*24+8]  = 1;
+	mas[number*24+9]  = 1;
+	mas[number*24+10] = 1;
+	mas[number*24+11] = 1;
+	mas[number*24+12] = 1;
+	mas[number*24+13] = 1;
+	mas[number*24+14] = 1;
+	mas[number*24+15] = 1;
+
+	mas[number*24+16] = 0;
+	mas[number*24+17] = 0;
+	mas[number*24+18] = 0;
+	mas[number*24+19] = 0;
+	mas[number*24+20] = 0;
+	mas[number*24+21] = 0;
+	mas[number*24+22] = 0;
+	mas[number*24+23] = 0;
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(htim);
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_TIM_PeriodElapsedCallback could be implemented in the user file
+   */
+}
 /* USER CODE END 4 */
 
 /**

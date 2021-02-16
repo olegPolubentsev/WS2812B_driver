@@ -27,7 +27,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
-
+extern TIM_HandleTypeDef htim3;
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -161,7 +161,7 @@ void EXTI4_15_IRQHandler(void)
 void DMA1_Channel4_5_6_7_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel4_5_6_7_IRQn 0 */
-
+HAL_TIM_PWM_Stop_DMA(&htim3, TIM_CHANNEL_1);
   /* USER CODE END DMA1_Channel4_5_6_7_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_tim3_ch1_trig);
   /* USER CODE BEGIN DMA1_Channel4_5_6_7_IRQn 1 */

@@ -1,0 +1,100 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.23.0.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Oleg Polubentsev, Apple, LIC=2TTQ1-CU726-VJC6J-U93Y8-LG290-R17NK
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.23
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 4 (build 422)
+Assembler:       Armasm.exe V5.06 update 4 (build 422)
+Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
+Library Manager: ArmAr.exe V5.06 update 4 (build 422)
+Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
+CPU DLL:         SARMCM3.DLL V5.23
+Dialog DLL:      DARMCM1.DLL V1.17.0.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
+Dialog DLL:      TARMCM1.DLL V1.12.0.0
+ 
+<h2>Project:</h2>
+C:\Users\olegp\Desktop\WS2812B_driver\WS2812B\MDK-ARM\WS2812B.uvprojx
+Project File Date:  02/16/2021
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'WS2812B'
+assembling startup_stm32f072xb.s...
+compiling main.c...
+../Core/Src/main.c(204): error:  #20: identifier "hdma_tim3_ch1" is undefined
+        hdma_tim3_ch1.Instance = DMA1_Stream1;
+../Core/Src/main.c(204): error:  #20: identifier "DMA1_Stream1" is undefined
+        hdma_tim3_ch1.Instance = DMA1_Stream1;
+../Core/Src/main.c(205): error:  #20: identifier "DMA_CHANNEL_4" is undefined
+        hdma_tim3_ch1.Init.Channel = DMA_CHANNEL_4;
+../Core/Src/main.c(213): error:  #20: identifier "DMA_FIFOMODE_DISABLE" is undefined
+        hdma_tim3_ch1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+../Core/Src/main.c(214): error:  #20: identifier "DMA_FIFO_THRESHOLD_FULL" is undefined
+        hdma_tim3_ch1.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+../Core/Src/main.c(215): error:  #20: identifier "DMA_MBURST_SINGLE" is undefined
+        hdma_tim3_ch1.Init.MemBurst = DMA_MBURST_SINGLE;
+../Core/Src/main.c(216): error:  #20: identifier "DMA_PBURST_SINGLE" is undefined
+        hdma_tim3_ch1.Init.PeriphBurst = DMA_PBURST_SINGLE;
+../Core/Src/main.c(217): error:  #20: identifier "hdma_tim1_ch1" is undefined
+        HAL_DMA_Init(&hdma_tim1_ch1);
+../Core/Src/main.c(219): error:  #20: identifier "htim_base" is undefined
+        
+_HAL_LINKDMA(htim_base,hdma[TIM_DMA_ID_CC1],hdma_tim1_ch1);
+../Core/Src/main.c(279): warning:  #186-D: pointless comparison of unsigned integer with zero
+  	if (number > kol_led-1) number = kol_led-1; else if (number<0) number = 0;
+../Core/Src/main.c(281): warning:  #186-D: pointless comparison of unsigned integer with zero
+  	else if (R<0) R=0;
+../Core/Src/main.c(283): warning:  #186-D: pointless comparison of unsigned integer with zero
+  		else if (G<0) G=0;
+../Core/Src/main.c(285): warning:  #186-D: pointless comparison of unsigned integer with zero
+  			else if (B<0) B=0;
+../Core/Src/main.c: 4 warnings, 9 errors
+compiling stm32f0xx_it.c...
+compiling stm32f0xx_hal_msp.c...
+compiling stm32f0xx_hal_tim_ex.c...
+compiling stm32f0xx_hal_rcc.c...
+compiling stm32f0xx_hal_tim.c...
+compiling stm32f0xx_hal_rcc_ex.c...
+compiling stm32f0xx_hal.c...
+compiling stm32f0xx_hal_i2c.c...
+compiling stm32f0xx_hal_i2c_ex.c...
+compiling stm32f0xx_hal_gpio.c...
+compiling stm32f0xx_hal_dma.c...
+compiling stm32f0xx_hal_cortex.c...
+compiling stm32f0xx_hal_pwr.c...
+compiling stm32f0xx_hal_pwr_ex.c...
+compiling stm32f0xx_hal_flash.c...
+compiling stm32f0xx_hal_flash_ex.c...
+compiling stm32f0xx_hal_exti.c...
+compiling system_stm32f0xx.c...
+"WS2812B\WS2812B.axf" - 9 Error(s), 4 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.0.1.pack
+                ARM::CMSIS:CORE:5.0.1
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.0.1
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_WS2812B
+  C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
+  C:\Keil_v5\ARM\PACK\Keil\STM32F0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.0.1
+Target not created.
+Build Time Elapsed:  00:00:42
+</pre>
+</body>
+</html>
