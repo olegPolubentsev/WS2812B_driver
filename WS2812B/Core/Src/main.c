@@ -19,14 +19,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "ws2812_LED.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#define log_0 17
-#define log_1 41
-#define quantity_led 100
-#define RESET_DELAY 40
-uint32_t buf[RESET_DELAY+(quantity_led*24)+3] = {0};
+
 
 /* USER CODE END Includes */
 
@@ -105,28 +101,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//				   R  G  B
 	  reset_buf();
-	  for (int i = 0; i<quantity_led; i+=3)
-	  {
-		  set_pixel(i+0, 255, 0, 0);
-		  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
-		  HAL_Delay(200);
-
-		  set_pixel(i+1, 0, 255, 0);
-		  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
-		  HAL_Delay(200);
-
-		  set_pixel(i+2, 0, 0, 255);
-		  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
-		  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint8_t*)&buf, (RESET_DELAY+(quantity_led*24))+2);
-		  HAL_Delay(200);
+	  WS2812_setColor_All_Pixel(0,0,255); //вся* лента засветится синим
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
 
 
-	  }
-	  reset_buf();
-	  	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
-	  	  HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -275,80 +254,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void set_pixel(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B)
-{
-	if (pixel > quantity_led-1) pixel = quantity_led-1; else if (pixel<0) pixel = 0;
-	if (R>255) R=255;
-	else if (R<0) R=0;
-		else if (G>255) G=255;
-		else if (G<0) G=0;
-			else if (B>255) B=255;
-			else if (B<0) B=0;
 
-	//GGGGGGGG RRRRRRRR BBBBBBBB //  8+8+8
-	//RED -----------------------------------------------------
-		for(int i=0; i<8; i++)
-		{
-			if (bit_set(R,(7-i)) == 1)
-			{
-				buf[RESET_DELAY + pixel*24 + 8 + i] = log_1;
-			}
-			else
-			{
-				buf[RESET_DELAY + pixel*24 + 8 + i] = log_0;
-			}
-
-		}
-	//GREEN -----------------------------------------------------
-		for(int i=0; i<8; i++)
-		{
-			if (bit_set(G,(7-i)) == 1)
-			{
-				buf[RESET_DELAY + pixel*24 + 0 + i] = log_1;
-			}
-			else
-			{
-				buf[RESET_DELAY + pixel*24 + 0 + i] = log_0;
-			}
-
-		}
-	//BLUE -----------------------------------------------------
-		for(int i=0; i<8; i++)
-		{
-			if (bit_set(B,(7-i)) == 1)
-			{
-				buf[RESET_DELAY + pixel*24 + 16 + i] = log_1;
-			}
-			else
-			{
-				buf[RESET_DELAY + pixel*24 + 16 + i] = log_0;
-			}
-
-		}
-
-}
-
-int bit_set(int pixel_value, int pos)
-{
-	int value = 0;
-    if (((pixel_value >> pos)&0x01) == 1 ) value = 1;
-	return value;
-}
-
-void reset_buf(void)
-{
-	for (int i = 0; i<RESET_DELAY; i++)
-	    {
-	  	  buf[i] = 0;
-	    }
-	for (int i = RESET_DELAY; i<quantity_led*24+RESET_DELAY; i++)
-	  	{
-		  buf[i] = log_0;
-	    }
-	buf[RESET_DELAY+quantity_led*24] = 0;
-	buf[RESET_DELAY+quantity_led*24+1] = 0;
-	buf[RESET_DELAY+quantity_led*24+2] = 0;
-}
 
 
 /* USER CODE END 4 */
