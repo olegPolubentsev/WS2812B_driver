@@ -24,10 +24,10 @@
 /* USER CODE BEGIN Includes */
 #define log_0 17
 #define log_1 41
-uint32_t hz = 59; // 48000000/59=800kHz
-uint16_t value_pwm = 0;
-const int kol_led = 10;
-uint16_t mas[40+240] = {0};
+#define quantity_led 100
+#define RESET_DELAY 40
+uint32_t buf[RESET_DELAY+(quantity_led*24)+3] = {0};
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -82,18 +82,14 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  reset_buf();
   /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  for (int i = 40; i<239+40; i+=2)
-  {
-	  mas[i] = log_0;
-	  mas[i+1] = log_1;
-  }
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -102,77 +98,39 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   //HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&mas, kol_led*24+40);
+  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint8_t*)&mas, 20);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&mas, kol_led*24+40);
+//				   R  G  B
+	  reset_buf();
+	  for (int i = 0; i<quantity_led; i+=3)
+	  {
+		  set_pixel(i+0, 255, 0, 0);
+		  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+		  HAL_Delay(200);
+
+		  set_pixel(i+1, 0, 255, 0);
+		  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+		  HAL_Delay(200);
+
+		  set_pixel(i+2, 0, 0, 255);
+		  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+		  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint8_t*)&buf, (RESET_DELAY+(quantity_led*24))+2);
+		  HAL_Delay(200);
+
+
+	  }
+	  reset_buf();
+	  	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  	  HAL_Delay(200);
     /* USER CODE END WHILE */
-//TIM3->CCR1 =20;
+
     /* USER CODE BEGIN 3 */
-	//HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&mas, kol_led*24);
-/*
- TIM3->CCR1 = 0;
- HAL_Delay(1);
- TIM3->CCR1 = log_0;
- HAL_Delay(1);
- TIM3->CCR1 = 0;
-  HAL_Delay(1);
- TIM3->CCR1 = log_0;
- delay_T();
- TIM3->CCR1 = log_0;
-  delay_T();
-  TIM3->CCR1 = log_0;
-   delay_T();
-   TIM3->CCR1 = log_0;
-    delay_T();
-    TIM3->CCR1 = log_0;
-     delay_T();
-     TIM3->CCR1 = log_0;
-      delay_T();
-      TIM3->CCR1 = log_0;
-       delay_T();
-       TIM3->CCR1 = log_0;
-       //----------------------------
-        delay_T();
-        TIM3->CCR1 = log_1;
-         delay_T();
-         TIM3->CCR1 = log_1;
-          delay_T();
-          TIM3->CCR1 = log_1;
-           delay_T();
-           TIM3->CCR1 = log_1;
-            delay_T();
-            TIM3->CCR1 = log_1;
-             delay_T();
-             TIM3->CCR1 = log_1;
-              delay_T();
-              TIM3->CCR1 = log_1;
-               delay_T();
-               TIM3->CCR1 = log_1;
-                delay_T();
-                //----------------------------
-                        delay_T();
-                        TIM3->CCR1 = log_0;
-                         delay_T();
-                         TIM3->CCR1 = log_0;
-                          delay_T();
-                          TIM3->CCR1 = log_0;
-                           delay_T();
-                           TIM3->CCR1 = log_0;
-                            delay_T();
-                            TIM3->CCR1 = log_0;
-                             delay_T();
-                             TIM3->CCR1 = log_0;
-                              delay_T();
-                              TIM3->CCR1 = log_0;
-                               delay_T();
-                               TIM3->CCR1 = log_0;
-                                delay_T();
-                                */
+
   }
   /* USER CODE END 3 */
 }
@@ -317,9 +275,9 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void set_led(uint16_t number, uint16_t R, uint16_t G, uint16_t B)
+void set_pixel(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B)
 {
-	if (number > kol_led-1) number = kol_led-1; else if (number<0) number = 0;
+	if (pixel > quantity_led-1) pixel = quantity_led-1; else if (pixel<0) pixel = 0;
 	if (R>255) R=255;
 	else if (R<0) R=0;
 		else if (G>255) G=255;
@@ -327,44 +285,72 @@ void set_led(uint16_t number, uint16_t R, uint16_t G, uint16_t B)
 			else if (B>255) B=255;
 			else if (B<0) B=0;
 
+	//GGGGGGGG RRRRRRRR BBBBBBBB //  8+8+8
+	//RED -----------------------------------------------------
+		for(int i=0; i<8; i++)
+		{
+			if (bit_set(R,(7-i)) == 1)
+			{
+				buf[RESET_DELAY + pixel*24 + 8 + i] = log_1;
+			}
+			else
+			{
+				buf[RESET_DELAY + pixel*24 + 8 + i] = log_0;
+			}
 
-	mas[number*24]    = 0;
-    mas[number*24+1]  = 0;
-    mas[number*24+2]  = 0;
-    mas[number*24+3]  = 0;
-	mas[number*24+4]  = 0;
-	mas[number*24+5]  = 0;
-	mas[number*24+6]  = 0;
-	mas[number*24+7]  = 0;
+		}
+	//GREEN -----------------------------------------------------
+		for(int i=0; i<8; i++)
+		{
+			if (bit_set(G,(7-i)) == 1)
+			{
+				buf[RESET_DELAY + pixel*24 + 0 + i] = log_1;
+			}
+			else
+			{
+				buf[RESET_DELAY + pixel*24 + 0 + i] = log_0;
+			}
 
-	mas[number*24+8]  = 1;
-	mas[number*24+9]  = 1;
-	mas[number*24+10] = 1;
-	mas[number*24+11] = 1;
-	mas[number*24+12] = 1;
-	mas[number*24+13] = 1;
-	mas[number*24+14] = 1;
-	mas[number*24+15] = 1;
+		}
+	//BLUE -----------------------------------------------------
+		for(int i=0; i<8; i++)
+		{
+			if (bit_set(B,(7-i)) == 1)
+			{
+				buf[RESET_DELAY + pixel*24 + 16 + i] = log_1;
+			}
+			else
+			{
+				buf[RESET_DELAY + pixel*24 + 16 + i] = log_0;
+			}
 
-	mas[number*24+16] = 0;
-	mas[number*24+17] = 0;
-	mas[number*24+18] = 0;
-	mas[number*24+19] = 0;
-	mas[number*24+20] = 0;
-	mas[number*24+21] = 0;
-	mas[number*24+22] = 0;
-	mas[number*24+23] = 0;
+		}
+
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+int bit_set(int pixel_value, int pos)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(htim);
-
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_TIM_PeriodElapsedCallback could be implemented in the user file
-   */
+	int value = 0;
+    if (((pixel_value >> pos)&0x01) == 1 ) value = 1;
+	return value;
 }
+
+void reset_buf(void)
+{
+	for (int i = 0; i<RESET_DELAY; i++)
+	    {
+	  	  buf[i] = 0;
+	    }
+	for (int i = RESET_DELAY; i<quantity_led*24+RESET_DELAY; i++)
+	  	{
+		  buf[i] = log_0;
+	    }
+	buf[RESET_DELAY+quantity_led*24] = 0;
+	buf[RESET_DELAY+quantity_led*24+1] = 0;
+	buf[RESET_DELAY+quantity_led*24+2] = 0;
+}
+
+
 /* USER CODE END 4 */
 
 /**
