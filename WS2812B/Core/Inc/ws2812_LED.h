@@ -4,6 +4,9 @@
  *  Created on: 17 февр. 2021 г.
  *      Author: olegplb
  */
+#include <stdio.h>
+#include <malloc.h>
+#include <stdlib.h>
 
 #ifndef INC_WS2812_LED_H_
 #define INC_WS2812_LED_H_
@@ -11,13 +14,16 @@
 #define log_0 17
 #define log_1 41
 //==========================================================================
-#define quantity_led 100 //количесто диодов
+//#define quantity_led 100 //количесто диодов
 //==========================================================================
-#define RESET_DELAY 40
+#define RESET_DELAY 50
 
 
-uint32_t buf[RESET_DELAY+(quantity_led*24)+3] = {0};
-uint8_t array_prepared_values[3][quantity_led];
+//uint32_t buf[RESET_DELAY+(quantity_led*24)+3] = {0};
+uint32_t *buf;
+//uint8_t array_prepared_values[3][quantity_led];
+uint8_t array_prepared_values[3][3];
+uint16_t quantity_led = 0; //количесто диодов
 
 //**************
 void WS2812_set_Prepared_Value(uint16_t, uint16_t, uint16_t, uint16_t);
@@ -25,13 +31,17 @@ void WS2812_Reproduce_Prepared_Erray(void);
 void WS2812_Clear_Prepared_Erray(void);
 void WS2812_setColor_All_Pixel(uint16_t, uint16_t, uint16_t);
 void WS2812_setColor_Pixel(uint16_t, uint16_t, uint16_t, uint16_t);
+void WS2812_Ini(uint16_t);
 //**************
 
-uint8_t array_prepared_values[3][quantity_led] = {0};
+//uint8_t array_prepared_values[3][quantity_led] = {0};
 
 //=======================================================================================================================
-void WS2812_Ini()  //записать в подготавливаемый массив цвето указанного диода
+void WS2812_Ini(uint16_t size)  //записать в подготавливаемый массив цвето указанного диода
 {
+	//buf = new uint32_t[size];
+	buf = (uint32_t*)malloc((RESET_DELAY+(size*24)+4) * sizeof(uint32_t));
+	quantity_led = size;
 	//HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
 }
 //=======================================================================================================================
