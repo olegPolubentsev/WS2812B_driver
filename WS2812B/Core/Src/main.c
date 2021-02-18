@@ -101,10 +101,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  reset_buf();
+	  WS2812_Clear_buf();
 	  WS2812_setColor_All_Pixel(0,0,255);
-	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+3);
-	  HAL_Delay(1);
+	  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (50+(quantity_led*24))*2+3);
+	  WS2812_Update();
+	  HAL_Delay(300);
+
+	  WS2812_Clear_buf();
+	  WS2812_setColor_All_Pixel(0,255,0);
+	  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (50+(quantity_led*24))*2+3);
+	  WS2812_Update();
+	  HAL_Delay(300);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

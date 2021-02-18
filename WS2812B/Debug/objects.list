@@ -4,6 +4,7 @@
 "Core/Src/syscalls.o"
 "Core/Src/sysmem.o"
 "Core/Src/system_stm32f0xx.o"
+"Core/Src/ws2812_LED.o"
 "Core/Startup/startup_stm32f072c8tx.o"
 "Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal.o"
 "Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_cortex.o"

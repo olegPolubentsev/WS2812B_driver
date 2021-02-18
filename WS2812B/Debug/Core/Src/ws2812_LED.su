@@ -1,0 +1,11 @@
+ws2812_LED.c:28:6:WS2812_Init	40	static
+ws2812_LED.c:48:19:WS2812_Update	8	static
+ws2812_LED.c:53:6:WS2812_set_Prepared_Value	24	static
+ws2812_LED.c:62:6:WS2812_Reproduce_Prepared_Erray	24	static
+ws2812_LED.c:70:6:WS2812_Clear_Prepared_Erray	16	static
+ws2812_LED.c:82:6:WS2812_setColor_All_Pixel	32	static
+ws2812_LED.c:92:6:WS2812_setColor_Pixel	40	static
+ws2812_LED.c:140:5:bit_set	24	static
+ws2812_LED.c:149:6:WS2812_Clear_buf	16	static
+ws2812_LED.c:158:6:check_value_colors	24	static
+ws2812_LED.c:167:6:check_value_position	16	static
