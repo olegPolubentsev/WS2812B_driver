@@ -78,7 +78,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  //reset_buf();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -93,24 +92,46 @@ int main(void)
   MX_DMA_Init();
   MX_TIM3_Init();
 
-  WS2812_Ini(10);
-  HAL_Delay(1);
+  WS2812_Init(10,&htim3,TIM_CHANNEL_1);
 
-  reset_buf();
-  WS2812_setColor_All_Pixel(0,0,255); //вся* лента засветится синим
   /* USER CODE BEGIN 2 */
-  //HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
-  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint8_t*)&mas, 20);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  reset_buf();
+	  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+3+50);
+	  //HAL_Delay(1);
 
-	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  WS2812_setColor_All_Pixel(0,0,255);
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+3);
 	  HAL_Delay(1);
+/*
+	  reset_buf();
+	  WS2812_setColor_All_Pixel(0,255,0);
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  HAL_Delay(1000);
 
+	  WS2812_setColor_All_Pixel(255,0,0);
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  HAL_Delay(1000);
+
+	  WS2812_setColor_All_Pixel(255,255,255);
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  HAL_Delay(1000);
+
+	  WS2812_setColor_Pixel(2, 145, 255, 20);
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  HAL_Delay(1200);
+	  WS2812_setColor_Pixel(4, 255, 145, 20);
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  HAL_Delay(1200);
+	  WS2812_setColor_Pixel(7, 200, 78, 120);
+	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	  HAL_Delay(1200);
+*/
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
