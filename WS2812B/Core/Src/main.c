@@ -92,6 +92,11 @@ int main(void)
   MX_DMA_Init();
   MX_TIM3_Init();
 
+  //WS2812_INIT (my_ws2812,10,&htim3,TIM_CHANNEL_1)
+
+	myWS.tim_chanel = TIM_CHANNEL_1;
+	myWS.pointer_tim = &htim3;
+	myWS.quantity_led = 10;
   WS2812_Init(10,&htim3,TIM_CHANNEL_1);
 
   /* USER CODE BEGIN 2 */
@@ -103,13 +108,11 @@ int main(void)
   {
 	  WS2812_Clear_buf();
 	  WS2812_setColor_All_Pixel(0,0,255);
-	  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (50+(quantity_led*24))*2+3);
 	  WS2812_Update();
 	  HAL_Delay(300);
 
 	  WS2812_Clear_buf();
 	  WS2812_setColor_All_Pixel(0,255,0);
-	  //HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (50+(quantity_led*24))*2+3);
 	  WS2812_Update();
 	  HAL_Delay(300);
     /* USER CODE END WHILE */
