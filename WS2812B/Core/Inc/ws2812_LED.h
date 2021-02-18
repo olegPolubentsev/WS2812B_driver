@@ -19,7 +19,7 @@
 #define RESET_DELAY 50
 
 uint32_t *buf;
-//uint32_t buf[50+2*24+3];
+//uint32_t buf[50+10*24+3];
 uint16_t buf_size = 0;
 uint8_t *array_prepared_values;
 uint16_t quantity_led = 0; //количесто диодов
@@ -40,7 +40,7 @@ HAL_StatusTypeDef WS2812_Update(void);
 //=======================================================================================================================
 void WS2812_Init(uint16_t size, TIM_HandleTypeDef *h_tim, uint32_t chanel)  //записать в подготавливаемый массив цвето указанного диода
 {
-	buf = (uint32_t*)malloc((RESET_DELAY+(size*24)+3)* sizeof(uint32_t));
+	buf = (uint32_t*)malloc((RESET_DELAY+(size*24)+3) * sizeof(uint32_t));
 	quantity_led = size;
 	array_prepared_values = (uint8_t*)malloc(size*3 * sizeof(uint8_t));
 
@@ -54,8 +54,7 @@ void WS2812_Init(uint16_t size, TIM_HandleTypeDef *h_tim, uint32_t chanel)  //з
 //=======================================================================================================================
 HAL_StatusTypeDef WS2812_Update(void)  //обновить ленту
 {
-	return HAL_TIM_PWM_Start_DMA (&pointer_tim, pointer_tim_chanel, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
-	//HAL_TIM_PWM_Start_DMA (&pointer_tim, pointer_tim_chanel, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+	return HAL_TIM_PWM_Start_DMA (&pointer_tim, pointer_tim_chanel, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+3);
 	//delay_ws();
 	//return a;
 }
