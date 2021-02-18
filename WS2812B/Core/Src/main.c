@@ -104,7 +104,7 @@ int main(void)
 	  reset_buf();
 	  WS2812_setColor_All_Pixel(0,0,255); //вся* лента засветится синим
 	  HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
-
+	  HAL_Delay(10);
 
     /* USER CODE END WHILE */
 

@@ -22,13 +22,18 @@ uint8_t array_prepared_values[3][quantity_led];
 //**************
 void WS2812_set_Prepared_Value(uint16_t, uint16_t, uint16_t, uint16_t);
 void WS2812_Reproduce_Prepared_Erray(void);
-void WS2812_Clean_Prepared_Erray(void);
+void WS2812_Clear_Prepared_Erray(void);
 void WS2812_setColor_All_Pixel(uint16_t, uint16_t, uint16_t);
 void WS2812_setColor_Pixel(uint16_t, uint16_t, uint16_t, uint16_t);
 //**************
 
 uint8_t array_prepared_values[3][quantity_led] = {0};
 
+//=======================================================================================================================
+void WS2812_Ini()  //записать в подготавливаемый массив цвето указанного диода
+{
+	//HAL_TIM_PWM_Start_DMA (&htim3, TIM_CHANNEL_1, (uint32_t*)&buf, (RESET_DELAY+(quantity_led*24))*2+4);
+}
 //=======================================================================================================================
 void WS2812_set_Prepared_Value(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B)  //записать в подготавливаемый массив цвето указанного диода
 {
@@ -43,17 +48,17 @@ void WS2812_Reproduce_Prepared_Erray(void) //вывести заготовлен
 {
 	for (int i = 0; i < quantity_led ; i++)
 		{
-			WS2812_setColor_Pixel(pixel, array_prepared_values[0][pixel], array_prepared_values[1][pixel], array_prepared_values[2][pixel]);
+			WS2812_setColor_Pixel(i, array_prepared_values[0][i], array_prepared_values[1][i], array_prepared_values[2][i]);
 		}
 }
 //=======================================================================================================================
-void WS2812_Clean_Prepared_Erray(void) //очистить весь подготовленный массив
+void WS2812_Clear_Prepared_Erray(void) //очистить весь подготовленный массив
 {
 	for (int i = 0; i < quantity_led ; i++)
 	{
-		array_prepared_values[0][pixel] = 0;
-		array_prepared_values[1][pixel] = 0;
-		array_prepared_values[2][pixel] = 0;
+		array_prepared_values[0][i] = 0;
+		array_prepared_values[1][i] = 0;
+		array_prepared_values[2][i] = 0;
 	}
 
 
@@ -62,7 +67,7 @@ void WS2812_Clean_Prepared_Erray(void) //очистить весь подгот�
 void WS2812_setColor_All_Pixel(uint16_t R, uint16_t G, uint16_t B) //установить все светодиоды в указанный цвет
 {
 	check_value_colors(&R,&G,&B);
-	for (int i = RESET_DELAY; i < RESET_DELAY + quantity_led * 24; i++)
+	for (int i = 0; i < quantity_led; i++)
 	{
 		WS2812_setColor_Pixel(i, R, G, B);
 	}
