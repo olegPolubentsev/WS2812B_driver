@@ -10,20 +10,13 @@
 #define RESET_DELAY 50
 #include "main.h"
 
-typedef struct {
-uint32_t buf[RESET_DELAY+(10*24)*2+3];
-uint8_t  array_prepared_values[300];
-uint16_t quantity_led; //количесто диодов
-uint32_t pointer_tim;
-uint32_t tim_chanel;
-} WS2812;
 
-WS2812 myWS;
 //#define WS_SIZE_BUF(__NUMB_LED_) .....
-
-//#define WS2812_INIT(_NAME_,_SIZE_,_P_TIM_,_TIM_CHANAL_)  typedef struct { uint32_t buf[_SIZE_]; uint16_t buf_size; uint32_t pointer_tim; uint32_t tim_chanel; }WS2812; WS2812 my_ws2812; my_ws2812.buf_size = _SIZE_; my_ws2812.pointer_tim = _P_TIM_; my_ws2812.tim_chanel = _TIM_CHANAL_; array_prepared_values[_SIZE_]; Init_buf();
+//#define STRUCT_INIT(_NAME_,_SIZE_)  typedef struct { uint32_t buf[_SIZE_]; uint16_t buf_size; uint32_t pointer_tim; uint32_t tim_chanel; }WS2812;
+//#define WS2812_INIT(_NAME_,_SIZE_)  {STRUCT_INIT(_NAME_,_SIZE_) WS2812 _NAME_}
+//WS2812_INIT(myWS, 10);
 //WS2812.buf_size = RESET_DELAY+(_SIZE_*24)*2+3;
-
+//#define INI(_SIZE_) WS2812_INIT(myWS, _SIZE_);
 //		Wssss _NAME_ = {.buf = _NAME_ ## buf,}
 //WS2812 my_ws2812 = {.buf = _NAME_ ## buf,}
 //**************

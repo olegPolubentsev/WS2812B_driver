@@ -94,9 +94,7 @@ int main(void)
 
   //WS2812_INIT (my_ws2812,10,&htim3,TIM_CHANNEL_1)
 
-	myWS.tim_chanel = TIM_CHANNEL_1;
-	myWS.pointer_tim = &htim3;
-	myWS.quantity_led = 10;
+
   WS2812_Init(10,&htim3,TIM_CHANNEL_1);
 
   /* USER CODE BEGIN 2 */
