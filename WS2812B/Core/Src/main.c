@@ -96,7 +96,7 @@ int main(void)
 
 
 
-  WS2812_Init(&myWS);
+  WS2812_Init(&my);
 
   /* USER CODE BEGIN 2 */
   /* USER CODE END 2 */
@@ -105,14 +105,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  WS2812_Clear_buf(&myWS);
-	  WS2812_setColor_All_Pixel(&myWS,0,0,255);
-	  WS2812_Update(&myWS);
+	  WS2812_Clear_buf(&my);
+	  WS2812_setColor_All_Pixel(&my,0,0,255);
+	  WS2812_Update(&my);
 	  HAL_Delay(300);
 
-	  WS2812_Clear_buf(&myWS);
-	  WS2812_setColor_All_Pixel(&myWS,0,255,0);
-	  WS2812_Update(&myWS);
+	  WS2812_Clear_buf(&my);
+	  WS2812_setColor_All_Pixel(&my,0,255,0);
+	  WS2812_Update(&my);
 	  HAL_Delay(300);
     /* USER CODE END WHILE */
 
