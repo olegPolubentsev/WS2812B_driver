@@ -37,8 +37,8 @@ void WS2812_set_Prepared_Value(WS2812 *WS, __uint16_t pixel, __uint16_t R, __uin
 void WS2812_Reproduce_Prepared_Erray(WS2812 *WS);
 void WS2812_Clear_Prepared_Erray(WS2812 *WS);
 void WS2812_setColor_All_Pixel(WS2812 *WS, __uint16_t R, __uint16_t G, __uint16_t B);
-void WS2812_setColor_Pixel(WS2812 *WS, __uint16_t pixel, __uint16_t R, __uint16_t G, __uint16_t B);
-void WS2812_Init(WS2812 *WS, __uint16_t size, TIM_HandleTypeDef*, __uint32_t);
+void WS2812_setColor_Pixel(WS2812 *WS, __uint16_t pixel, __uint8_t R, __uint8_t G, __uint8_t B);
+void WS2812_Init(WS2812 *WS);
 HAL_StatusTypeDef WS2812_Update(WS2812 *WS);
 void WS2812_Clear_buf(WS2812 *WS);
 //**************

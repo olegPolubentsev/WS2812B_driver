@@ -96,7 +96,7 @@ int main(void)
 
 
 
-  //WS2812_Init(10,&htim3,TIM_CHANNEL_1);
+  WS2812_Init(&myWS);
 
   /* USER CODE BEGIN 2 */
   /* USER CODE END 2 */

@@ -4,31 +4,20 @@
  *  Created on: 18 февр. 2021 г.
  *      Author: olegp
  */
-//#include <malloc.h>
+
 #include "ws2812_LED.h"
 #include "main.h"
 
-//#define _NAME_POS_(_NAME_) _NAME_##WS
 
 extern WS2812 *WS;
 
 #define log_0 17
 #define log_1 41
 
-
-
-//==========================================================================
-//#define quantity_led 100 //количесто диодов
-//==========================================================================
-//#define RESET_DELAY 50
-
 //=======================================================================================================================
-void WS2812_Init(WS2812 *WS, uint16_t size, TIM_HandleTypeDef *h_tim, uint32_t chanel )  //записать в подготавливаемый массив цвето указанного диода
+void WS2812_Init(WS2812 *WS)  //записать в подготавливаемый массив цвето указанного диода
 {
-	//WS2812_INIT(*WS, 10);
-	WS->tim_chanel = chanel;
-	WS->pointer_tim = h_tim;
-	WS->quantity_led = size;
+
 	for (int i = 0; i<RESET_DELAY; i++)
 			    {
 		WS->buf[i] = 0;
@@ -75,18 +64,16 @@ void WS2812_Clear_Prepared_Erray(WS2812 *WS) //очистить весь под�
 //=======================================================================================================================
 void WS2812_setColor_All_Pixel(WS2812 *WS, uint16_t R, uint16_t G, uint16_t B) //установить все светодиоды в указанный цвет
 {
-	//check_value_colors(&R,&G,&B);
+
 	for (int i = 0; i < WS->quantity_led; i++)
 	{
-		WS2812_setColor_Pixel(WS,i, R, G, B);
+		WS2812_setColor_Pixel(WS,i, (uint8_t)R, (uint8_t)G, (uint8_t)B);
 	}
 }
 
 //=======================================================================================================================
-void WS2812_setColor_Pixel(WS2812 *WS, uint16_t pixel, uint16_t R, uint16_t G, uint16_t B) //установить светодиод под указанным номером в указанный цвет
+void WS2812_setColor_Pixel(WS2812 *WS, uint16_t pixel, uint8_t R, uint8_t G, uint8_t B) //установить светодиод под указанным номером в указанный цвет
 {
-	check_value_position(WS,&pixel);
-	check_value_colors(WS,&R,&G,&B);
 
 	//GGGGGGGG RRRRRRRR BBBBBBBB //  8+8+8
 	//RED -----------------------------------------------------
@@ -149,7 +136,7 @@ void WS2812_Clear_buf(WS2812 *WS)
 
 }
 //=======================================================================================================================
-void check_value_colors(uint16_t *R, uint16_t *G, uint16_t *B)
+/*void check_value_colors(uint16_t *R, uint16_t *G, uint16_t *B)
 {
 	if (*R>255) *R=255;
 	else if (*R<0) *R=0;
@@ -161,7 +148,7 @@ void check_value_colors(uint16_t *R, uint16_t *G, uint16_t *B)
 void check_value_position(WS2812 *WS, uint16_t *pixel)
 {
 	if (*pixel > WS->quantity_led-1) *pixel = WS->quantity_led-1; else if (*pixel<0) *pixel = 0;
-}
+}*/
 //=======================================================================================================================
 
 
