@@ -6,89 +6,87 @@
  */
 //#include <malloc.h>
 #include "ws2812_LED.h"
+#include "main.h"
+
+//#define _NAME_POS_(_NAME_) _NAME_##WS
+
+extern WS2812 *WS;
 
 #define log_0 17
 #define log_1 41
+
 
 
 //==========================================================================
 //#define quantity_led 100 //количесто диодов
 //==========================================================================
 //#define RESET_DELAY 50
-typedef struct {
-uint32_t buf[RESET_DELAY+(10*24)*2+3];
-uint8_t  array_prepared_values[300];
-uint16_t quantity_led; //количесто диодов
-uint32_t pointer_tim;
-uint32_t tim_chanel;
-} WS2812;
 
-WS2812 myWS;
 //=======================================================================================================================
-void WS2812_Init(uint16_t size, TIM_HandleTypeDef* h_tim, uint32_t chanel )  //записать в подготавливаемый массив цвето указанного диода
+void WS2812_Init(WS2812 *WS, uint16_t size, TIM_HandleTypeDef *h_tim, uint32_t chanel )  //записать в подготавливаемый массив цвето указанного диода
 {
-	//WS2812_INIT(myWS, 10);
-	myWS.tim_chanel = chanel;
-	myWS.pointer_tim = h_tim;
-	myWS.quantity_led = size;
+	//WS2812_INIT(*WS, 10);
+	WS->tim_chanel = chanel;
+	WS->pointer_tim = h_tim;
+	WS->quantity_led = size;
 	for (int i = 0; i<RESET_DELAY; i++)
 			    {
-		myWS.buf[i] = 0;
+		WS->buf[i] = 0;
 			    }
-		myWS.buf[RESET_DELAY+myWS.quantity_led*24] = 0;
-		myWS.buf[RESET_DELAY+myWS.quantity_led*24+1] = 0;
-		myWS.buf[RESET_DELAY+myWS.quantity_led*24+2] = 0;
+		(WS->buf[RESET_DELAY+WS->quantity_led*24]) = 0;
+		(WS->buf[RESET_DELAY+WS->quantity_led*24+1]) = 0;
+		(WS->buf[RESET_DELAY+WS->quantity_led*24+2]) = 0;
 
 }
 //=======================================================================================================================
-HAL_StatusTypeDef WS2812_Update(void)  //обновить ленту
+HAL_StatusTypeDef WS2812_Update(WS2812 *WS)  //обновить ленту
 {
-	return HAL_TIM_PWM_Start_DMA (myWS.pointer_tim, myWS.tim_chanel, (uint32_t*)&myWS.buf[0], (RESET_DELAY+(myWS.quantity_led*24))*2+3);
+	return HAL_TIM_PWM_Start_DMA (WS->pointer_tim, WS->tim_chanel, (uint32_t*)&WS->buf[0], (RESET_DELAY+(WS->quantity_led*24))*2+3);
 }
 //=======================================================================================================================
-void WS2812_set_Prepared_Value(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B)  //записать в подготавливаемый массив цвето указанного диода
+void WS2812_set_Prepared_Value(WS2812 *WS, uint16_t pixel, uint16_t R, uint16_t G, uint16_t B)  //записать в подготавливаемый массив цвето указанного диода
 {
 	check_value_position(&pixel);
 	check_value_colors(&R,&G,&B);
-	myWS.array_prepared_values[myWS.quantity_led*pixel+0] = R;
-	myWS.array_prepared_values[myWS.quantity_led*pixel+1] = G;
-	myWS.array_prepared_values[myWS.quantity_led*pixel+2] = B;
+	WS->array_prepared_values[WS->quantity_led*pixel+0] = R;
+	WS->array_prepared_values[WS->quantity_led*pixel+1] = G;
+	WS->array_prepared_values[WS->quantity_led*pixel+2] = B;
 }
 //=======================================================================================================================
-void WS2812_Reproduce_Prepared_Erray(void) //вывести заготовленый массив в буффер ДМА
+void WS2812_Reproduce_Prepared_Erray(WS2812 *WS) //вывести заготовленый массив в буффер ДМА
 {
-	for (int i = 0; i < myWS.quantity_led ; i++)
+	for (int i = 0; i < WS->quantity_led ; i++)
 		{
-			WS2812_setColor_Pixel(i, myWS.array_prepared_values[myWS.quantity_led*i+0], myWS.array_prepared_values[myWS.quantity_led*i+1], myWS.array_prepared_values[myWS.quantity_led*i+2]);
+			WS2812_setColor_Pixel(WS, i, WS->array_prepared_values[WS->quantity_led*i+0], WS->array_prepared_values[WS->quantity_led*i+1], WS->array_prepared_values[WS->quantity_led*i+2]);
 		}
 }
 //=======================================================================================================================
-void WS2812_Clear_Prepared_Erray(void) //очистить весь подготовленный массив
+void WS2812_Clear_Prepared_Erray(WS2812 *WS) //очистить весь подготовленный массив
 {
-	for (int i = 0; i < myWS.quantity_led ; i++)
+	for (int i = 0; i < WS->quantity_led ; i++)
 	{
-		myWS.array_prepared_values[myWS.quantity_led*i+0] = 0;
-		myWS.array_prepared_values[myWS.quantity_led*i+1] = 0;
-		myWS.array_prepared_values[myWS.quantity_led*i+2] = 0;
+		WS->array_prepared_values[WS->quantity_led*i+0] = 0;
+		WS->array_prepared_values[WS->quantity_led*i+1] = 0;
+		WS->array_prepared_values[WS->quantity_led*i+2] = 0;
 	}
 
 
 }
 //=======================================================================================================================
-void WS2812_setColor_All_Pixel(uint16_t R, uint16_t G, uint16_t B) //установить все светодиоды в указанный цвет
+void WS2812_setColor_All_Pixel(WS2812 *WS, uint16_t R, uint16_t G, uint16_t B) //установить все светодиоды в указанный цвет
 {
 	//check_value_colors(&R,&G,&B);
-	for (int i = 0; i < myWS.quantity_led; i++)
+	for (int i = 0; i < WS->quantity_led; i++)
 	{
-		WS2812_setColor_Pixel(i, R, G, B);
+		WS2812_setColor_Pixel(WS,i, R, G, B);
 	}
 }
 
 //=======================================================================================================================
-void WS2812_setColor_Pixel(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B) //установить светодиод под указанным номером в указанный цвет
+void WS2812_setColor_Pixel(WS2812 *WS, uint16_t pixel, uint16_t R, uint16_t G, uint16_t B) //установить светодиод под указанным номером в указанный цвет
 {
-	check_value_position(&pixel);
-	check_value_colors(&R,&G,&B);
+	check_value_position(WS,&pixel);
+	check_value_colors(WS,&R,&G,&B);
 
 	//GGGGGGGG RRRRRRRR BBBBBBBB //  8+8+8
 	//RED -----------------------------------------------------
@@ -96,11 +94,11 @@ void WS2812_setColor_Pixel(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B) /
 		{
 			if (bit_set(R,(7-i)) == 1)
 			{
-				myWS.buf[RESET_DELAY + pixel*24 + 8 + i] = log_1;
+				WS->buf[RESET_DELAY + pixel*24 + 8 + i] = log_1;
 			}
 			else
 			{
-				myWS.buf[RESET_DELAY + pixel*24 + 8 + i] = log_0;
+				WS->buf[RESET_DELAY + pixel*24 + 8 + i] = log_0;
 			}
 
 		}
@@ -109,11 +107,11 @@ void WS2812_setColor_Pixel(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B) /
 		{
 			if (bit_set(G,(7-i)) == 1)
 			{
-				myWS.buf[RESET_DELAY + pixel*24 + 0 + i] = log_1;
+				WS->buf[RESET_DELAY + pixel*24 + 0 + i] = log_1;
 			}
 			else
 			{
-				myWS.buf[RESET_DELAY + pixel*24 + 0 + i] = log_0;
+				WS->buf[RESET_DELAY + pixel*24 + 0 + i] = log_0;
 			}
 
 		}
@@ -122,11 +120,11 @@ void WS2812_setColor_Pixel(uint16_t pixel, uint16_t R, uint16_t G, uint16_t B) /
 		{
 			if (bit_set(B,(7-i)) == 1)
 			{
-				myWS.buf[RESET_DELAY + pixel*24 + 16 + i] = log_1;
+				WS->buf[RESET_DELAY + pixel*24 + 16 + i] = log_1;
 			}
 			else
 			{
-				myWS.buf[RESET_DELAY + pixel*24 + 16 + i] = log_0;
+				WS->buf[RESET_DELAY + pixel*24 + 16 + i] = log_0;
 			}
 
 		}
@@ -142,11 +140,11 @@ int bit_set(int pixel_value, int pos)
 //=======================================================================================================================
 
 //=======================================================================================================================
-void WS2812_Clear_buf(void)
+void WS2812_Clear_buf(WS2812 *WS)
 {
-	for (int i = RESET_DELAY; i<myWS.quantity_led*24+RESET_DELAY; i++)
+	for (int i = RESET_DELAY; i<WS->quantity_led*24+RESET_DELAY; i++)
 	  	{
-		myWS.buf[i] = log_0;
+		WS->buf[i] = log_0;
 	    }
 
 }
@@ -160,9 +158,9 @@ void check_value_colors(uint16_t *R, uint16_t *G, uint16_t *B)
 			else if (*B>255) *B=255;
 			else if (*B<0) *B=0;
 }
-void check_value_position(uint16_t *pixel)
+void check_value_position(WS2812 *WS, uint16_t *pixel)
 {
-	if (*pixel > myWS.quantity_led-1) *pixel = myWS.quantity_led-1; else if (*pixel<0) *pixel = 0;
+	if (*pixel > WS->quantity_led-1) *pixel = WS->quantity_led-1; else if (*pixel<0) *pixel = 0;
 }
 //=======================================================================================================================
 

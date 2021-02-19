@@ -66,6 +66,7 @@ static void MX_TIM3_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+WS_INIT_(my,10,&htim3,TIM_CHANNEL_1)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -92,10 +93,10 @@ int main(void)
   MX_DMA_Init();
   MX_TIM3_Init();
 
-  //WS2812_INIT (my_ws2812,10,&htim3,TIM_CHANNEL_1)
 
 
-  WS2812_Init(10,&htim3,TIM_CHANNEL_1);
+
+  //WS2812_Init(10,&htim3,TIM_CHANNEL_1);
 
   /* USER CODE BEGIN 2 */
   /* USER CODE END 2 */
@@ -104,14 +105,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  WS2812_Clear_buf();
-	  WS2812_setColor_All_Pixel(0,0,255);
-	  WS2812_Update();
+	  WS2812_Clear_buf(&myWS);
+	  WS2812_setColor_All_Pixel(&myWS,0,0,255);
+	  WS2812_Update(&myWS);
 	  HAL_Delay(300);
 
-	  WS2812_Clear_buf();
-	  WS2812_setColor_All_Pixel(0,255,0);
-	  WS2812_Update();
+	  WS2812_Clear_buf(&myWS);
+	  WS2812_setColor_All_Pixel(&myWS,0,255,0);
+	  WS2812_Update(&myWS);
 	  HAL_Delay(300);
     /* USER CODE END WHILE */
 

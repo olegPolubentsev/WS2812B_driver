@@ -25,7 +25,8 @@ Core/Src/ws2812_LED.o: ../Core/Src/ws2812_LED.c ../Core/Inc/ws2812_LED.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim.h \
- ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
+ ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h \
+ ../Core/Inc/main.h
 
 ../Core/Inc/ws2812_LED.h:
 
@@ -84,3 +85,5 @@ Core/Src/ws2812_LED.o: ../Core/Src/ws2812_LED.c ../Core/Inc/ws2812_LED.h \
 ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim.h:
 
 ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h:
+
+../Core/Inc/main.h:
