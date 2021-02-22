@@ -13,7 +13,8 @@
 
 typedef struct {
 uint32_t *buf;
-uint8_t  array_prepared_values[300];
+uint8_t  *array_prepared_values;
+uint32_t buf_prep_len;
 uint16_t quantity_led; //количесто диодов
 TIM_HandleTypeDef *pointer_tim;
 uint32_t tim_chanel;
