@@ -17,12 +17,14 @@ uint8_t  array_prepared_values[300];
 uint16_t quantity_led; //количесто диодов
 TIM_HandleTypeDef *pointer_tim;
 uint32_t tim_chanel;
+uint8_t log_0;
+uint8_t log_1;
 } WS2812;
 
 ///WS2812 myWS;
 #define WS_SIZE_BUF(_SIZE_) RESET_DELAY+(_SIZE_*24)*2+3
 #define WS_ARRAY_CR_(_NAME_,_SIZE_) uint32_t _NAME_##WS[WS_SIZE_BUF(_SIZE_)]
-#define WS_INIT_(_NAME_,_SIZE_,_P_TIM_,_CHANEL_TIM_) WS_ARRAY_CR_(_NAME_,_SIZE_); WS2812 _NAME_ = {.buf = _NAME_##WS, .quantity_led = _SIZE_, .pointer_tim = _P_TIM_, .tim_chanel = _CHANEL_TIM_};
+#define WS_INIT_(_NAME_,_SIZE_,_P_TIM_,_CHANEL_TIM_) WS_ARRAY_CR_(_NAME_,_SIZE_); WS2812 _NAME_ = {.buf = _NAME_##WS, .quantity_led = _SIZE_, .pointer_tim = _P_TIM_, .tim_chanel = _CHANEL_TIM_, .log_0 = 17, .log_1 = 41};
 
 //#define WS_SIZE_BUF(__NUMB_LED_) .....
 //#define STRUCT_INIT(_NAME_,_SIZE_)  typedef struct { uint32_t buf[_SIZE_]; uint16_t buf_size; uint32_t pointer_tim; uint32_t tim_chanel; }WS2812;
